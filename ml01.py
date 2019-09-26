@@ -1,26 +1,27 @@
 from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-from sklearn.neighbors import KNeighborsClassifier
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
 
 if __name__ == '__main__':
-    # step #1, get some data
-    data = load_iris()
-    dataX = data['data']
-    dataY = data['target']
+    # get our data
+    iris = load_iris()
+    dataX = iris['data']
+    dataY = iris['target']
 
-    # step #2, split data into training & testing
-    trainX, testX, trainY, testY = train_test_split(dataX, dataY, test_size=0.3)
-        
-    # step #3, create a learner
-    learner = KNeighborsClassifier()
+    # add the feature names
+    features = ['sepal length', 'sepal width', 'petal length', 'petal width']
 
-    # step #4, fit the data
-    learner.fit(trainX, trainY)
+    # for reference, our labels
+    classes = ('setosa', 'versicolour', 'verginica')
 
-    # step #5, have learner predict labels for our test data
-    predictY = learner.predict(testX)
+    df = pd.DataFrame(data=dataX, columns=features)
+    df['labels'] = dataY
+    df['labels'] = df['labels'].map({0: 'setosa', 1: 'versicolour', 2: 'verginica'})
 
-    # step #6, get metrics
-    accuracy = accuracy_score(testY, predictY)
-    print(accuracy)
+    sns.set()
+    g = sns.scatterplot(x='sepal length', y='sepal width', data=df, hue='labels', palette=['green', 'red', 'blue'])
+    plt.show(g)
+
+    g = sns.scatterplot(x='petal length', y='petal width', data=df, hue='labels', palette=['green', 'red', 'blue'])
+    plt.show(g)
